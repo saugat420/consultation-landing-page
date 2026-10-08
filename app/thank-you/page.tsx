@@ -1,6 +1,5 @@
-import Link from "next/link";
 import type { Metadata } from "next";
-import { Check } from "lucide-react";
+import { Check, MessageCircle } from "lucide-react";
 import { Header } from "@/components/Header";
 
 export const metadata: Metadata = {
@@ -15,15 +14,34 @@ export default function ThankYouPage() {
       <section className="flex min-h-[calc(100vh-76px)] items-center px-5 py-14 sm:px-6 sm:py-20">
         <div className="thank-you-card mx-auto w-full max-w-2xl text-center">
           <div className="confirmation-icon mx-auto" aria-hidden="true"><Check className="h-9 w-9" strokeWidth={2.5} /></div>
-          <p className="eyebrow mt-7">Demo submission complete</p>
           <h1 className="mt-2 text-4xl font-bold tracking-[-0.04em] sm:text-5xl">Thank You!</h1>
           <h2 className="mt-4 text-xl font-semibold text-zinc-800 sm:text-2xl">Your Consultation Request Has Been Received.</h2>
-          <p className="mx-auto mt-5 max-w-xl text-base leading-7 text-zinc-600">Your form is complete. This is a demo submission, so your details have not been sent or saved.</p>
-          <div className="mt-7 rounded-2xl border border-amber-200 bg-amber-50 px-5 py-4 text-left sm:px-6">
-            <p className="font-semibold text-zinc-950">Next steps</p>
-            <p className="mt-1 text-sm leading-6 text-zinc-600">Once the live booking system is connected, you&apos;ll receive instructions for the next step.</p>
+
+          <div className="video-section">
+            <p className="eyebrow">Before you go</p>
+            <h2>Watch This Video</h2>
+            <p>Watch this short video to understand what happens next and how to prepare for your consultation.</p>
+            <div className="video-frame">
+              <iframe
+                src="https://player.vimeo.com/video/76979871?title=0&byline=0&portrait=0"
+                title="What happens next after your consultation request"
+                allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+                referrerPolicy="strict-origin-when-cross-origin"
+                allowFullScreen
+              />
+            </div>
           </div>
-          <Link href="/" className="mt-8 inline-flex min-h-11 items-center justify-center rounded-xl px-4 text-sm font-bold text-zinc-900 underline decoration-amber-500 decoration-2 underline-offset-4 hover:text-black focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-amber-200">Return to the consultation page</Link>
+
+          <div className="whatsapp-card">
+            <span className="whatsapp-icon" aria-hidden="true"><MessageCircle /></span>
+            <h2>Connect With Me on WhatsApp</h2>
+            <p>Have a question about your consultation or want to discuss your business goals? Send me a message directly on WhatsApp.</p>
+            <a href="https://wa.me/9779812345678" target="_blank" rel="noopener noreferrer" className="whatsapp-button" aria-label="Connect with me on WhatsApp at +977 9812345678">
+              <MessageCircle aria-hidden="true" />
+              Connect With Me on WhatsApp
+            </a>
+            <p className="whatsapp-number">+977 9812345678</p>
+          </div>
         </div>
       </section>
     </main>
