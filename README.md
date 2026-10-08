@@ -21,9 +21,9 @@ Open the local URL printed in the terminal.
 ## Production builds
 
 - Sites: `npm run build`
-- Vercel: set the build command to `npm run build:vercel`
+- Vercel: `vercel.json` automatically selects the Next.js build via `npm run build:vercel`
 
-For Vercel, import this project, keep the framework preset as Next.js, and use `npm run build:vercel` as the Build Command. No environment variables are required for the demo version.
+For Vercel, import this project and keep the framework preset as Next.js. The committed `vercel.json` overrides the Sites/Vinext build command automatically. No environment variables are required for the demo version.
 
 ## Brand updates
 
