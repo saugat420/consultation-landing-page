@@ -8,7 +8,7 @@ const steps = [
 
 export function Process() {
   return (
-    <section className="section-shell bg-slate-50" aria-labelledby="process-title">
+    <section className="section-shell process-section" aria-labelledby="process-title">
       <div className="mx-auto max-w-6xl">
         <div className="section-heading">
           <p className="eyebrow">Three simple steps</p>

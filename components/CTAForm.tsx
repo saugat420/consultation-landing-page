@@ -34,7 +34,7 @@ function validate(form: FormData): Errors {
   return errors;
 }
 
-const fieldClass = "h-12 rounded-xl border-slate-300 bg-white px-4 text-base text-slate-950 shadow-none placeholder:text-slate-400 focus-visible:border-blue-600 focus-visible:ring-4 focus-visible:ring-blue-100";
+const fieldClass = "h-12 rounded-xl border-zinc-300 bg-white px-4 text-base text-zinc-950 shadow-none placeholder:text-zinc-400 focus-visible:border-amber-500 focus-visible:ring-4 focus-visible:ring-amber-100";
 
 export function CTAForm() {
   const router = useRouter();
@@ -61,13 +61,13 @@ export function CTAForm() {
       <div className="mx-auto grid max-w-6xl items-start gap-10 lg:grid-cols-[0.82fr_1.18fr] lg:gap-16">
         <div className="lg:sticky lg:top-8">
           <p className="eyebrow">Your free consultation</p>
-          <h2 id="form-title" className="text-balance text-3xl font-bold tracking-[-0.035em] text-slate-950 sm:text-4xl">Book Your Free Consultation</h2>
-          <p className="mt-4 max-w-lg text-base leading-7 text-slate-600">Share a few details about your business so the conversation can focus on your current challenges and opportunities.</p>
+          <h2 id="form-title" className="text-balance text-3xl font-bold tracking-[-0.035em] text-white sm:text-4xl">Book Your Free Consultation</h2>
+          <p className="mt-4 max-w-lg text-base leading-7 text-zinc-300">Share a few details about your business so the conversation can focus on your current challenges and opportunities.</p>
           <ul className="mt-7 space-y-3" aria-label="Consultation includes">
             <li className="supporting-point"><CheckCircle2 aria-hidden="true" />One-to-One Consultation</li>
             <li className="supporting-point"><CheckCircle2 aria-hidden="true" />Customized Strategy for Your Business</li>
           </ul>
-          <p className="mt-7 flex items-center gap-2 text-sm text-slate-500"><LockKeyhole aria-hidden="true" className="h-4 w-4" />We respect your privacy. No spam.</p>
+          <p className="mt-7 flex items-center gap-2 text-sm text-zinc-400"><LockKeyhole aria-hidden="true" className="h-4 w-4" />We respect your privacy. No spam.</p>
         </div>
 
         <form className="form-card" onSubmit={handleSubmit} noValidate>
@@ -92,12 +92,12 @@ export function CTAForm() {
           </div>
           <div className="mt-5">
             <label htmlFor="message" className="field-label">Anything You Want to Say <span>Optional</span></label>
-            <Textarea id="message" name="message" placeholder="Tell us about your business or marketing challenges" className="mt-2 min-h-28 resize-y rounded-xl border-slate-300 bg-white px-4 py-3 text-base text-slate-950 shadow-none placeholder:text-slate-400 focus-visible:border-blue-600 focus-visible:ring-4 focus-visible:ring-blue-100" />
+            <Textarea id="message" name="message" placeholder="Tell us about your business or marketing challenges" className="mt-2 min-h-28 resize-y rounded-xl border-zinc-300 bg-white px-4 py-3 text-base text-zinc-950 shadow-none placeholder:text-zinc-400 focus-visible:border-amber-500 focus-visible:ring-4 focus-visible:ring-amber-100" />
           </div>
-          <Button type="submit" disabled={submitting} className="mt-7 h-13 w-full rounded-xl bg-blue-600 px-5 text-base font-bold text-white shadow-[0_14px_30px_rgba(37,99,235,0.22)] hover:bg-blue-700 focus-visible:ring-4 focus-visible:ring-blue-200 disabled:opacity-70">
+          <Button type="submit" disabled={submitting} className="mt-7 h-13 w-full rounded-xl bg-[#ffc400] px-5 text-base font-extrabold text-black shadow-[0_14px_30px_rgba(255,196,0,0.22)] hover:bg-[#ffd433] focus-visible:ring-4 focus-visible:ring-amber-200 disabled:opacity-70">
             {submitting ? <><Loader2 aria-hidden="true" className="h-5 w-5 animate-spin" />Submitting…</> : <>Book My Free Consultation</>}
           </Button>
-          <p className="mt-4 text-center text-sm leading-6 text-slate-500">Demo form: your details will not be sent or saved.</p>
+          <p className="mt-4 text-center text-sm leading-6 text-zinc-500">Demo form: your details will not be sent or saved.</p>
         </form>
       </div>
     </section>

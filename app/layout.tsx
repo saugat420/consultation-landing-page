@@ -14,8 +14,8 @@ export const metadata: Metadata = {
     siteName: "Digital Saugat",
   },
   icons: {
-    icon: "/logo.webp",
-    shortcut: "/logo.webp",
+    icon: "/digital-saugat-icon.png",
+    shortcut: "/digital-saugat-icon.png",
   },
 };
 

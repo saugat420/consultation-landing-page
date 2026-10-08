@@ -10,10 +10,10 @@ const benefits = [
 
 export function Benefits() {
   return (
-    <section className="section-shell" aria-labelledby="benefits-title">
+    <section className="section-shell benefits-section" aria-labelledby="benefits-title">
       <div className="mx-auto max-w-6xl">
         <div className="section-heading">
-          <p className="eyebrow">A clearer path forward</p>
+          <p className="eyebrow">Your consultation outcomes</p>
           <h2 id="benefits-title">How You Benefit From This Consultation</h2>
         </div>
         <ul className="benefit-grid">
