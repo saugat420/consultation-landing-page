@@ -23,9 +23,9 @@ export default function ThankYouPage() {
             <p>Watch this short video to understand what happens next and how to prepare for your consultation.</p>
             <div className="video-frame">
               <iframe
-                src="https://player.vimeo.com/video/76979871?title=0&byline=0&portrait=0"
+                src="https://www.youtube.com/embed/1baI5Achry0?rel=0"
                 title="What happens next after your consultation request"
-                allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 referrerPolicy="strict-origin-when-cross-origin"
                 allowFullScreen
               />
