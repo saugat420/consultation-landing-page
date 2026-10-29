@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { FormEvent, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CheckCircle2, Loader2, LockKeyhole } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -10,21 +10,42 @@ import { Textarea } from "@/components/ui/textarea";
 const FLODESK_FORM_ID = "6adf7429625c8f6b87440d59";
 const FLODESK_ROOT_CLASS = `ff-${FLODESK_FORM_ID}`;
 const FLODESK_SUBMIT_URL = `https://form.flodesk.com/forms/${FLODESK_FORM_ID}/submit`;
-const FLODESK_TARGET = "flodesk-submit-frame";
 const fieldClass =
   "h-12 rounded-xl border-zinc-300 bg-white px-4 text-base text-zinc-950 shadow-none placeholder:text-zinc-400 focus-visible:border-amber-500 focus-visible:ring-4 focus-visible:ring-amber-100";
 
 export function CTAForm() {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
-  function handleSubmit() {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (submitting) return;
+
     setSubmitting(true);
-    window.setTimeout(() => router.push("/thank-you"), 5000);
-  }
+    setSubmitError("");
+    const formData = new FormData(event.currentTarget);
+    const payload = Object.fromEntries(
+      [...formData.entries()].map(([key, value]) => [key, String(value).trim()]),
+    );
 
-  function handleResponse() {
-    if (submitting) router.push("/thank-you");
+    try {
+      const response = await fetch(FLODESK_SUBMIT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json;charset=UTF-8" },
+        body: JSON.stringify(payload),
+      });
+      const result = (await response.json()) as { status?: string };
+
+      if (!response.ok || result.status !== "success") {
+        throw new Error("Flodesk rejected the submission.");
+      }
+
+      router.push("/thank-you");
+    } catch {
+      setSubmitError("We couldn't send your request. Please try again.");
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -54,10 +75,14 @@ export function CTAForm() {
               className={`form-card ${FLODESK_ROOT_CLASS}__form`}
               action={FLODESK_SUBMIT_URL}
               method="post"
-              target={FLODESK_TARGET}
               onSubmit={handleSubmit}
               data-ff-el="form"
             >
+              {submitError && (
+                <p role="alert" className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">
+                  {submitError}
+                </p>
+              )}
               <div className={`${FLODESK_ROOT_CLASS}__content fd-form-content`} data-ff-el="content">
                 <div className={`${FLODESK_ROOT_CLASS}__fields`} data-ff-el="fields">
                   <div className="grid gap-5 sm:grid-cols-2">
@@ -96,12 +121,6 @@ export function CTAForm() {
               <div data-ff-el="success" className={`${FLODESK_ROOT_CLASS}__success fd-form-success hidden`} aria-live="polite">Your request has been received.</div>
               <div data-ff-el="error" className={`${FLODESK_ROOT_CLASS}__error fd-form-error mt-4 text-sm font-medium text-red-600`} role="alert" />
             </form>
-            <iframe
-              name={FLODESK_TARGET}
-              title="Flodesk submission response"
-              className="hidden"
-              onLoad={handleResponse}
-            />
           </div>
         </div>
       </section>
