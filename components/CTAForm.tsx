@@ -10,6 +10,8 @@ import { Textarea } from "@/components/ui/textarea";
 const FLODESK_FORM_ID = "6adf7429625c8f6b87440d59";
 const FLODESK_ROOT_CLASS = `ff-${FLODESK_FORM_ID}`;
 const FLODESK_API_URL = "/api/flodesk";
+const FLODESK_CONFIG =
+  "eyJ0cmlnZ2VyIjp7Im1vZGUiOiJpbW1lZGlhdGVseSIsInZhbHVlIjowfSwib25TdWNjZXNzIjp7Im1vZGUiOiJyZWRpcmVjdCIsIm1lc3NhZ2UiOiIiLCJyZWRpcmVjdFVybCI6Imh0dHBzOi8vYXBwb2ludG1lbnQuZGlnaXRhbHNhdWdhdC5jb20vdGhhbmsteW91In0sImNvaSI6ZmFsc2UsInNob3dGb3JSZXR1cm5WaXNpdG9ycyI6dHJ1ZSwibm90aWZpY2F0aW9uIjp0cnVlLCJnZHByIjp7ImFjY2VwdHNNYXJrZXRpbmciOmZhbHNlLCJwcml2YWN5UG9saWN5Ijp7ImVuYWJsZWQiOmZhbHNlLCJtYW5kYXRvcnkiOmZhbHNlfX0sInRyYWNraW5nQ29uZmlnIjp7Im1ldGFQaXhlbElkIjoiIiwiY29vaWVCYW5uZXJFbmFibGVkIjpmYWxzZSwiZ29vZ2xlQW5hbHl0aWNzSWQiOiIifX0=";
 const fieldClass =
   "h-12 rounded-xl border-zinc-300 bg-white px-4 text-base text-zinc-950 shadow-none placeholder:text-zinc-400 focus-visible:border-amber-500 focus-visible:ring-4 focus-visible:ring-amber-100";
 
@@ -104,6 +106,7 @@ export function CTAForm() {
             data-ff-name="inlineNoImage"
             data-ff-stage="default"
           >
+            <div data-ff-el="config" data-ff-config={FLODESK_CONFIG} className="hidden" />
             <form
               className={`form-card ${FLODESK_ROOT_CLASS}__form`}
               action={FLODESK_API_URL}
