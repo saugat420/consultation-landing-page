@@ -1,14 +1,32 @@
-import { CheckCircle2, LockKeyhole } from "lucide-react";
+"use client";
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { CheckCircle2, Loader2, LockKeyhole } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
 const FLODESK_FORM_ID = "6adf7429625c8f6b87440d59";
 const FLODESK_ROOT_CLASS = `ff-${FLODESK_FORM_ID}`;
+const FLODESK_SUBMIT_URL = `https://form.flodesk.com/forms/${FLODESK_FORM_ID}/submit`;
+const FLODESK_TARGET = "flodesk-submit-frame";
 const fieldClass =
   "h-12 rounded-xl border-zinc-300 bg-white px-4 text-base text-zinc-950 shadow-none placeholder:text-zinc-400 focus-visible:border-amber-500 focus-visible:ring-4 focus-visible:ring-amber-100";
 
-export function CTAForm({ submissionError }: { submissionError?: string }) {
+export function CTAForm() {
+  const router = useRouter();
+  const [submitting, setSubmitting] = useState(false);
+
+  function handleSubmit() {
+    setSubmitting(true);
+    window.setTimeout(() => router.push("/thank-you"), 5000);
+  }
+
+  function handleResponse() {
+    if (submitting) router.push("/thank-you");
+  }
+
   return (
     <>
       <section id="consultation-form" className="form-section scroll-mt-4 px-5 py-16 sm:px-6 sm:py-24" aria-labelledby="form-title">
@@ -34,17 +52,12 @@ export function CTAForm({ submissionError }: { submissionError?: string }) {
           >
             <form
               className={`form-card ${FLODESK_ROOT_CLASS}__form`}
-              action="/api/flodesk"
+              action={FLODESK_SUBMIT_URL}
               method="post"
+              target={FLODESK_TARGET}
+              onSubmit={handleSubmit}
               data-ff-el="form"
             >
-              {submissionError && (
-                <p role="alert" className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700">
-                  {submissionError === "missing"
-                    ? "Please complete every field before submitting the form."
-                    : "We couldn't send your request. Please check your connection and try again."}
-                </p>
-              )}
               <div className={`${FLODESK_ROOT_CLASS}__content fd-form-content`} data-ff-el="content">
                 <div className={`${FLODESK_ROOT_CLASS}__fields`} data-ff-el="fields">
                   <div className="grid gap-5 sm:grid-cols-2">
@@ -74,8 +87,8 @@ export function CTAForm({ submissionError }: { submissionError?: string }) {
                 </div>
 
                 <div className={`${FLODESK_ROOT_CLASS}__footer`} data-ff-el="footer">
-                  <Button type="submit" data-ff-el="submit" data-ff-tab="submit" className={`${FLODESK_ROOT_CLASS}__button fd-btn mt-7 h-13 w-full rounded-xl bg-[#ffc400] px-5 text-base font-extrabold text-black shadow-[0_14px_30px_rgba(255,196,0,0.22)] hover:bg-[#ffd433] focus-visible:ring-4 focus-visible:ring-amber-200`}>
-                    Book My Free Consultation
+                  <Button type="submit" disabled={submitting} data-ff-el="submit" data-ff-tab="submit" className={`${FLODESK_ROOT_CLASS}__button fd-btn mt-7 h-13 w-full rounded-xl bg-[#ffc400] px-5 text-base font-extrabold text-black shadow-[0_14px_30px_rgba(255,196,0,0.22)] hover:bg-[#ffd433] focus-visible:ring-4 focus-visible:ring-amber-200 disabled:opacity-70`}>
+                    {submitting ? <><Loader2 aria-hidden="true" className="h-5 w-5 animate-spin" />Submitting…</> : <>Book My Free Consultation</>}
                   </Button>
                 </div>
                 <p className="mt-4 text-center text-sm leading-6 text-zinc-500">Your details are securely submitted through Flodesk.</p>
@@ -83,6 +96,12 @@ export function CTAForm({ submissionError }: { submissionError?: string }) {
               <div data-ff-el="success" className={`${FLODESK_ROOT_CLASS}__success fd-form-success hidden`} aria-live="polite">Your request has been received.</div>
               <div data-ff-el="error" className={`${FLODESK_ROOT_CLASS}__error fd-form-error mt-4 text-sm font-medium text-red-600`} role="alert" />
             </form>
+            <iframe
+              name={FLODESK_TARGET}
+              title="Flodesk submission response"
+              className="hidden"
+              onLoad={handleResponse}
+            />
           </div>
         </div>
       </section>
