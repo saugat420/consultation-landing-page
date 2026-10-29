@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 
 const FLODESK_FORM_ID = "6adf7429625c8f6b87440d59";
 const FLODESK_ROOT_CLASS = `ff-${FLODESK_FORM_ID}`;
-const FLODESK_SUBMIT_URL = `https://form.flodesk.com/forms/${FLODESK_FORM_ID}/submit`;
+const FLODESK_API_URL = "/api/flodesk";
 const fieldClass =
   "h-12 rounded-xl border-zinc-300 bg-white px-4 text-base text-zinc-950 shadow-none placeholder:text-zinc-400 focus-visible:border-amber-500 focus-visible:ring-4 focus-visible:ring-amber-100";
 
@@ -17,6 +17,11 @@ export function CTAForm() {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
+  const [verification, setVerification] = useState<{
+    verificationToken: string;
+    verificationField: string;
+  } | null>(null);
+  const [humanConfirmed, setHumanConfirmed] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -24,18 +29,46 @@ export function CTAForm() {
 
     setSubmitting(true);
     setSubmitError("");
-    const formData = new FormData(event.currentTarget);
-    const payload = Object.fromEntries(
-      [...formData.entries()].map(([key, value]) => [key, String(value).trim()]),
-    );
+    if (verification && !humanConfirmed) {
+      setSubmitError("Please confirm that you are not a robot.");
+      setSubmitting(false);
+      return;
+    }
+
+    const payload = verification
+      ? { ...verification, humanConfirmed }
+      : Object.fromEntries(
+          [...new FormData(event.currentTarget).entries()].map(([key, value]) => [
+            key,
+            String(value).trim(),
+          ]),
+        );
 
     try {
-      const response = await fetch(FLODESK_SUBMIT_URL, {
+      const response = await fetch(FLODESK_API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json;charset=UTF-8" },
         body: JSON.stringify(payload),
       });
-      const result = (await response.json()) as { status?: string };
+      const result = (await response.json()) as {
+        status?: string;
+        verificationToken?: string;
+        verificationField?: string;
+      };
+
+      if (
+        response.ok &&
+        result.status === "verification_required" &&
+        result.verificationToken &&
+        result.verificationField
+      ) {
+        setVerification({
+          verificationToken: result.verificationToken,
+          verificationField: result.verificationField,
+        });
+        setSubmitting(false);
+        return;
+      }
 
       if (!response.ok || result.status !== "success") {
         throw new Error("Flodesk rejected the submission.");
@@ -73,7 +106,7 @@ export function CTAForm() {
           >
             <form
               className={`form-card ${FLODESK_ROOT_CLASS}__form`}
-              action={FLODESK_SUBMIT_URL}
+              action={FLODESK_API_URL}
               method="post"
               onSubmit={handleSubmit}
               data-ff-el="form"
@@ -111,9 +144,24 @@ export function CTAForm() {
                   <input type="text" maxLength={255} name="confirm_email_address" tabIndex={-1} autoComplete="off" className="hidden" aria-hidden="true" />
                 </div>
 
+                {verification && (
+                  <label className="mt-6 flex cursor-pointer items-center gap-3 rounded-xl border border-amber-300 bg-amber-50 px-4 py-4 text-sm font-semibold text-zinc-900">
+                    <input
+                      type="checkbox"
+                      checked={humanConfirmed}
+                      onChange={(event) => {
+                        setHumanConfirmed(event.target.checked);
+                        setSubmitError("");
+                      }}
+                      className="h-5 w-5 accent-amber-500"
+                    />
+                    I am not a robot
+                  </label>
+                )}
+
                 <div className={`${FLODESK_ROOT_CLASS}__footer`} data-ff-el="footer">
                   <Button type="submit" disabled={submitting} data-ff-el="submit" data-ff-tab="submit" className={`${FLODESK_ROOT_CLASS}__button fd-btn mt-7 h-13 w-full rounded-xl bg-[#ffc400] px-5 text-base font-extrabold text-black shadow-[0_14px_30px_rgba(255,196,0,0.22)] hover:bg-[#ffd433] focus-visible:ring-4 focus-visible:ring-amber-200 disabled:opacity-70`}>
-                    {submitting ? <><Loader2 aria-hidden="true" className="h-5 w-5 animate-spin" />Submitting…</> : <>Book My Free Consultation</>}
+                    {submitting ? <><Loader2 aria-hidden="true" className="h-5 w-5 animate-spin" />Submitting…</> : verification ? <>Confirm &amp; Continue</> : <>Book My Free Consultation</>}
                   </Button>
                 </div>
                 <p className="mt-4 text-center text-sm leading-6 text-zinc-500">Your details are securely submitted through Flodesk.</p>
